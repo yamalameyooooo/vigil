@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.vigil</groupId>
+        <groupId>io.github.yamalameyooooo</groupId>
         <artifactId>vigil-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
@@ -16,7 +16,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.vigil</groupId>
+            <groupId>io.github.yamalameyooooo</groupId>
             <artifactId>vigil-core</artifactId>
             <version>${project.version}</version>
         </dependency>

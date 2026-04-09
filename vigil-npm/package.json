@@ -1,26 +1,33 @@
 {
   "name": "vigil-scan",
   "version": "1.0.0",
-  "description": "Compliance static analysis tool - npm wrapper for Vigil CLI",
+  "description": "Compliance static analysis tool for Java and JS/TS projects",
   "bin": {
     "vigil": "./bin/vigil.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yamalameyooooo/vigil.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yamalameyooooo/vigil/issues"
+  },
+  "homepage": "https://github.com/yamalameyooooo/vigil#readme",
+  "author": "yamalameyooooo",
+  "license": "Apache-2.0",
   "keywords": [
     "compliance",
     "security",
-    "static-analysis",
     "soc2",
     "gdpr",
     "hipaa",
-    "pci-dss"
+    "pci-dss",
+    "static-analysis"
   ],
-  "author": "Vigil Team",
-  "license": "MIT",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/vigil/vigil.git"
+  "publishConfig": {
+    "access": "public"
   }
 }
