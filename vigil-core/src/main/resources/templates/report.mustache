@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIGIL - Compliance Scan Report</title>
+    <link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@6/patternfly.min.css">
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: "Red Hat Text", "Overpass", sans-serif;
+        }
+        .vigil-header {
+            background: linear-gradient(135deg, #1f1f2e 0%, #2d2d44 100%);
+            color: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .vigil-header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+        .vigil-header .subtitle {
+            margin-top: 0.5rem;
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 2rem 2rem;
+        }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .severity-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid;
+        }
+        .severity-card.critical {
+            border-left-color: #c9190b;
+        }
+        .severity-card.high {
+            border-left-color: #ec7a08;
+        }
+        .severity-card.medium {
+            border-left-color: #f0ab00;
+        }
+        .severity-card.low {
+            border-left-color: #2b9af3;
+        }
+        .severity-card .count {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        .severity-card .label {
+            color: #6a6e73;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+        .info-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .info-label {
+            color: #6a6e73;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+        .info-value {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .framework-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .framework-badge {
+            background: #2b9af3;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 16px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .filter-bar {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d2d2d2;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        .file-group {
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .file-header {
+            background: #f5f5f5;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #d2d2d2;
+        }
+        .file-header:hover {
+            background: #ebebeb;
+        }
+        .file-path {
+            font-family: "Red Hat Mono", monospace;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        .violation-count-badge {
+            background: #c9190b;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 16px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        .violations-container {
+            padding: 1rem;
+        }
+        .violation-card {
+            border: 1px solid #d2d2d2;
+            border-left: 4px solid;
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .violation-card:last-child {
+            margin-bottom: 0;
+        }
+        .violation-card.critical {
+            border-left-color: #c9190b;
+        }
+        .violation-card.high {
+            border-left-color: #ec7a08;
+        }
+        .violation-card.medium {
+            border-left-color: #f0ab00;
+        }
+        .violation-card.low {
+            border-left-color: #2b9af3;
+        }
+        .violation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .violation-title {
+            flex: 1;
+        }
+        .violation-title h3 {
+            margin: 0 0 0.25rem 0;
+            font-size: 1.125rem;
+        }
+        .rule-id {
+            color: #6a6e73;
+            font-family: "Red Hat Mono", monospace;
+            font-size: 0.875rem;
+        }
+        .severity-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .severity-badge.critical {
+            background: #c9190b;
+            color: white;
+        }
+        .severity-badge.high {
+            background: #ec7a08;
+            color: white;
+        }
+        .severity-badge.medium {
+            background: #f0ab00;
+            color: #151515;
+        }
+        .severity-badge.low {
+            background: #2b9af3;
+            color: white;
+        }
+        .violation-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            color: #6a6e73;
+        }
+        .violation-description {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        .code-snippet {
+            background: #1f1f2e;
+            color: #f0f0f0;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: "Red Hat Mono", monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        .recommendation {
+            background: #f0f8ff;
+            border-left: 4px solid #2b9af3;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        .recommendation strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2b9af3;
+        }
+        .empty-state {
+            background: white;
+            border-radius: 8px;
+            padding: 4rem 2rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        .empty-state h2 {
+            margin: 0 0 0.5rem 0;
+            color: #06c;
+        }
+        .empty-state p {
+            color: #6a6e73;
+            margin: 0;
+        }
+        .collapse-indicator {
+            font-size: 1.25rem;
+            transition: transform 0.2s;
+        }
+        .file-group.collapsed .collapse-indicator {
+            transform: rotate(-90deg);
+        }
+        .file-group.collapsed .violations-container {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="vigil-header">
+        <h1>VIGIL — Compliance Scan Report</h1>
+        <div class="subtitle">Static Analysis for Security & Compliance</div>
+    </div>
+
+    <div class="main-container">
+        <div class="info-section">
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Project</div>
+                    <div class="info-value">{{projectName}}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Scan Time</div>
+                    <div class="info-value">{{scanTime}}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Files Scanned</div>
+                    <div class="info-value">{{filesScanned}}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Total Violations</div>
+                    <div class="info-value">{{totalViolations}}</div>
+                </div>
+            </div>
+            {{#hasFrameworks}}
+            <div style="margin-top: 1.5rem;">
+                <div class="info-label">Affected Compliance Frameworks</div>
+                <div class="framework-badges">
+                    {{#frameworks}}
+                    <span class="framework-badge">{{name}}</span>
+                    {{/frameworks}}
+                </div>
+            </div>
+            {{/hasFrameworks}}
+        </div>
+
+        <div class="summary-cards">
+            <div class="severity-card critical">
+                <div class="count">{{criticalCount}}</div>
+                <div class="label">Critical</div>
+            </div>
+            <div class="severity-card high">
+                <div class="count">{{highCount}}</div>
+                <div class="label">High</div>
+            </div>
+            <div class="severity-card medium">
+                <div class="count">{{mediumCount}}</div>
+                <div class="label">Medium</div>
+            </div>
+            <div class="severity-card low">
+                <div class="count">{{lowCount}}</div>
+                <div class="label">Low</div>
+            </div>
+        </div>
+
+        {{#hasViolations}}
+        <div class="filter-bar">
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label for="severityFilter">Severity</label>
+                    <select id="severityFilter">
+                        <option value="">All Severities</option>
+                        <option value="critical">Critical</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="categoryFilter">Category</label>
+                    <select id="categoryFilter">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="searchFilter">Search</label>
+                    <input type="text" id="searchFilter" placeholder="Search violations...">
+                </div>
+            </div>
+        </div>
+
+        <div id="findings">
+            {{#fileGroups}}
+            <div class="file-group" data-file-path="{{filePath}}">
+                <div class="file-header" onclick="toggleFileGroup(this)">
+                    <div class="file-path">{{filePath}}</div>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <span class="violation-count-badge">{{violationCount}} violation(s)</span>
+                        <span class="collapse-indicator">▼</span>
+                    </div>
+                </div>
+                <div class="violations-container">
+                    {{#violations}}
+                    <div class="violation-card {{severityLower}}"
+                         data-severity="{{severityLower}}"
+                         data-category="{{category}}"
+                         data-search-text="{{ruleId}} {{ruleName}} {{description}}">
+                        <div class="violation-header">
+                            <div class="violation-title">
+                                <h3>{{ruleName}}</h3>
+                                <div class="rule-id">{{ruleId}}</div>
+                            </div>
+                            <span class="severity-badge {{severityLower}}">{{severity}}</span>
+                        </div>
+                        <div class="violation-meta">
+                            <span>📁 Category: {{category}}</span>
+                            <span>📍 Line {{lineNumber}}</span>
+                        </div>
+                        <div class="violation-description">{{description}}</div>
+                        <div class="code-snippet">{{codeSnippet}}</div>
+                        <div class="recommendation">
+                            <strong>Recommendation:</strong>
+                            {{recommendation}}
+                        </div>
+                        <div class="framework-badges">
+                            {{#frameworks}}
+                            <span class="framework-badge">{{name}}</span>
+                            {{/frameworks}}
+                        </div>
+                    </div>
+                    {{/violations}}
+                </div>
+            </div>
+            {{/fileGroups}}
+        </div>
+        {{/hasViolations}}
+
+        {{#noViolations}}
+        <div class="empty-state">
+            <div class="empty-state-icon">✅</div>
+            <h2>No Compliance Violations Found</h2>
+            <p>Your codebase passed all compliance checks. Great work!</p>
+        </div>
+        {{/noViolations}}
+    </div>
+
+    <script>
+        // Populate category filter
+        const categories = new Set();
+        document.querySelectorAll('.violation-card').forEach(card => {
+            categories.add(card.dataset.category);
+        });
+        const categoryFilter = document.getElementById('categoryFilter');
+        Array.from(categories).sort().forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat;
+            categoryFilter.appendChild(option);
+        });
+
+        // Filter functionality
+        function applyFilters() {
+            const severityFilter = document.getElementById('severityFilter').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const searchText = document.getElementById('searchFilter').value.toLowerCase();
+
+            document.querySelectorAll('.violation-card').forEach(card => {
+                const severity = card.dataset.severity;
+                const category = card.dataset.category;
+                const searchContent = card.dataset.searchText.toLowerCase();
+
+                const matchesSeverity = !severityFilter || severity === severityFilter;
+                const matchesCategory = !categoryFilter || category === categoryFilter;
+                const matchesSearch = !searchText || searchContent.includes(searchText);
+
+                card.style.display = (matchesSeverity && matchesCategory && matchesSearch) ? 'block' : 'none';
+            });
+
+            // Hide file groups with no visible violations
+            document.querySelectorAll('.file-group').forEach(group => {
+                const visibleViolations = Array.from(group.querySelectorAll('.violation-card'))
+                    .filter(card => card.style.display !== 'none');
+                group.style.display = visibleViolations.length > 0 ? 'block' : 'none';
+            });
+        }
+
+        document.getElementById('severityFilter').addEventListener('change', applyFilters);
+        document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+        document.getElementById('searchFilter').addEventListener('input', applyFilters);
+
+        // Collapse/expand functionality
+        function toggleFileGroup(header) {
+            header.parentElement.classList.toggle('collapsed');
+        }
+    </script>
+</body>
+</html>
