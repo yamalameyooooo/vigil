@@ -2,7 +2,6 @@ package com.vigil.report;
 
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
-import com.vigil.rules.Framework;
 import com.vigil.rules.Severity;
 import com.vigil.rules.Violation;
 
