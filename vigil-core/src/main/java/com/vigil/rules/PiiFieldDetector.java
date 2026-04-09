@@ -1,7 +1,5 @@
 package com.vigil.rules;
 
-import com.vigil.rules.Severity;
-
 import java.util.regex.Pattern;
 
 public class PiiFieldDetector {

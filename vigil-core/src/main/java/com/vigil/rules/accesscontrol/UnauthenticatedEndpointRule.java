@@ -2,7 +2,6 @@ package com.vigil.rules.accesscontrol;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.vigil.rules.Framework;
 import com.vigil.rules.RuleCategory;
 import com.vigil.rules.Severity;
