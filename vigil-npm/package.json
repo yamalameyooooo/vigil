@@ -1,0 +1,26 @@
+{
+  "name": "vigil-scan",
+  "version": "1.0.0",
+  "description": "Compliance static analysis tool - npm wrapper for Vigil CLI",
+  "bin": {
+    "vigil": "./bin/vigil.js"
+  },
+  "keywords": [
+    "compliance",
+    "security",
+    "static-analysis",
+    "soc2",
+    "gdpr",
+    "hipaa",
+    "pci-dss"
+  ],
+  "author": "Vigil Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vigil/vigil.git"
+  }
+}
