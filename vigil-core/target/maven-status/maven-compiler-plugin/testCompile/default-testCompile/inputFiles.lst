@@ -1,9 +1,0 @@
-/Users/sshamsud/Projects/Code/vigil/vigil-core/src/test/java/com/vigil/rules/ViolationTest.java
-/Users/sshamsud/Projects/Code/vigil/vigil-core/src/test/java/com/vigil/rules/accesscontrol/AccessControlRulesTest.java
-/Users/sshamsud/Projects/Code/vigil/vigil-core/src/test/java/com/vigil/rules/encryption/EncryptionRulesTest.java
-/Users/sshamsud/Projects/Code/vigil/vigil-core/src/test/java/com/vigil/rules/logging/LoggingRulesTest.java
-/Users/sshamsud/Projects/Code/vigil/vigil-core/src/test/java/com/vigil/rules/pii/PiiRulesTest.java
-/Users/sshamsud/Projects/Code/vigil/vigil-core/src/test/java/com/vigil/rules/secrets/HardcodedSecretsRuleTest.java
-/Users/sshamsud/Projects/Code/vigil/vigil-core/src/test/java/com/vigil/rules/storage/StorageRulesTest.java
-/Users/sshamsud/Projects/Code/vigil/vigil-core/src/test/java/com/vigil/scanner/FileDiscoveryTest.java
-/Users/sshamsud/Projects/Code/vigil/vigil-core/src/test/java/com/vigil/scanner/java/JavaAstScannerTest.java
